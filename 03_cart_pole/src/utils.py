@@ -6,7 +6,7 @@ import json
 from pdb import set_trace as stop
 
 import numpy as np
-import gym
+import gymnasium as gym
 import yaml
 import torch.nn as nn
 
@@ -102,15 +102,15 @@ def get_success_rate_from_n_steps(env: gym.Env, steps: List[int]):
 def get_observation_samples(env: gym.Env, n_samples: int) -> np.array:
     """"""
     samples = []
-    state = env.reset()
+    state, _ = env.reset()
     while len(samples) < n_samples:
 
         samples.append(np.copy(state))
         action = env.action_space.sample()
-        next_state, reward, done, info = env.step(action)
+        next_state, reward, terminated, truncated, info = env.step(action)
 
-        if done:
-            state = env.reset()
+        if terminated or truncated:
+            state, _ = env.reset()
         else:
             state = next_state
 
@@ -128,7 +128,7 @@ def set_seed(
     import numpy as np
     np.random.seed(seed)
 
-    env.seed(seed)
+    env.reset(seed=seed)
     env.action_space.seed(seed)
 
     import torch
@@ -137,9 +137,6 @@ def set_seed(
     # Deterministic operations for CuDNN, it may impact performances
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-
-    # env.seed(seed)
-    # gym.spaces.prng.seed(seed)
 
 
 def get_num_model_parameters(model: nn.Module) -> int:

@@ -47,7 +47,11 @@ def set_seed(
     import numpy as np
     np.random.seed(seed)
 
-    env.seed(seed)
+    try:
+        env.reset(seed)
+    except TypeError:
+        print("Warning: Seed not supported by environment")
+        env.reset()
     env.action_space.seed(seed)
 
     import torch

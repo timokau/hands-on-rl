@@ -1,9 +1,10 @@
 import numpy as np
 from pdb import set_trace as stop
+import gymnasium as gym
 
 class QAgent:
 
-    def __init__(self, env, alpha, gamma):
+    def __init__(self, env: gym.Env, alpha: float, gamma: float):
         self.env = env
 
         # table with q-values: n_states * n_actions

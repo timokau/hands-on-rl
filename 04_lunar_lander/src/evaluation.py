@@ -20,15 +20,16 @@ def evaluate(
 
     for i in tqdm(range(0, n_episodes)):
 
-        state = env.reset()
+        state, _ = env.reset()
         rewards = 0
         steps = 0
-        done = False
-        while not done:
+        terminated = False
+        truncated = False
+        while not (terminated or truncated):
 
             action = agent.act(torch.as_tensor(state, dtype=torch.float32))
 
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
 
             rewards += reward
             steps += 1

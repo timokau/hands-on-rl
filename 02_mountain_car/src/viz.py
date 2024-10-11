@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from pdb import set_trace as stop
 
 import pandas as pd
-import gym
+import gymnasium as gym
 
 from src.config import SAVED_AGENTS_DIR
 
@@ -51,8 +51,8 @@ def plot_policy(agent, positions: np.arange, velocities: np.arange, figsize = No
 
 def show_video(agent, env, sleep_sec: float = 0.1, mode: str = "rgb_array"):
 
-    state = env.reset()
-    done = False
+    state, _ = env.reset()
+    terminated = truncated = False
 
     # LAPADULA
     if mode == "rgb_array":
@@ -61,17 +61,17 @@ def show_video(agent, env, sleep_sec: float = 0.1, mode: str = "rgb_array"):
         steps = 0
         fig, ax = plt.subplots(figsize=(8, 6))
 
-    while not done:
+    while not (terminated or truncated):
 
         action = agent.get_action(state)
-        state, reward, done, info = env.step(action)
+        state, reward, terminated, truncated, info = env.step(action)
         # LAPADULA
         if mode == "rgb_array":
             steps += 1
-            frame = env.render(mode=mode)
+            frame = env.render()
             ax.cla()
             ax.axes.yaxis.set_visible(False)
-            ax.imshow(frame, extent=[env.min_position, env.max_position, 0, 1])
+            ax.imshow(frame, extent=[env.unwrapped.min_position, env.unwrapped.max_position, 0, 1])
             ax.set_title(f'Steps: {steps}')
             display(fig)
             clear_output(wait=True)
@@ -91,8 +91,8 @@ if __name__ == '__main__':
     agent_path = SAVED_AGENTS_DIR / args.agent_file
     agent = BaseAgent.load_from_disk(agent_path)
 
-    env = gym.make('MountainCar-v0')
-    env._max_episode_steps = 1000
+    env = gym.make('MountainCar-v0', render_mode="rgb_array")
+    env.unwrapped._max_episode_steps = 1000
 
     show_video(agent, env, sleep_sec=args.sleep_sec)
 

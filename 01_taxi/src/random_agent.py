@@ -1,10 +1,12 @@
 
+import gymnasium as gym
+
 class RandomAgent:
     """
     This taxi driver selects actions randomly.
     You better not get into this taxi!
     """
-    def __init__(self, env):
+    def __init__(self, env: gym.Env):
         self.env = env
 
     def get_action(self, state) -> int:

@@ -34,50 +34,7 @@ Today's lesson is split into 3 parts.
 
 ## Quick setup
 
-Make sure you have Python >= 3.7. Otherwise, update it.
-
-1. Pull the code from GitHub and cd into the `01_taxi` folder:
-    ```
-    $ git clone https://github.com/Paulescu/hands-on-rl.git
-    $ cd hands-on-rl/01_taxi
-    ```
-
-2. Make sure you have the `virtualenv` tool in your Python installation
-    ```
-   $ pip3 install virtualenv
-   ```
-
-3. Create a virtual environment and activate it.
-    ```
-    $ virtualenv -p python3 venv
-    $ source venv/bin/activate
-    ```
-
-   From this point onwards commands run inside the  virtual environment.
-
-
-3. Install dependencies and code from `src` folder in editable mode, so you can experiment with the code.
-    ```
-    $ (venv) pip install -r requirements.txt
-    $ (venv) export PYTHONPATH="."
-    ```
-
-4. Open the notebooks, either with good old Jupyter or Jupyter lab
-    ```
-    $ (venv) jupyter notebook
-    ```
-    ```
-    $ (venv) jupyter lab
-    ```
-   If both launch commands fail, try these:
-    ```
-    $ (venv) jupyter notebook --NotebookApp.use_redirect_file=False
-    ```
-    ```
-    $ (venv) jupyter lab --NotebookApp.use_redirect_file=False
-    ```
-
-5. Play and learn. And do the homework 😉.
+Set up the poetry environment as in the previous tutorial.
 
 ## Notebooks
 

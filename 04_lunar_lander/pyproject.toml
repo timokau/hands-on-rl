@@ -5,22 +5,22 @@ description = ""
 authors = ["Pau <plabartabajo@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
-numpy = "^1.22.3"
-torch = "^1.11.0"
-scipy = "^1.8.0"
-Box2D = "^2.3.10"
-box2d-py = "^2.3.8"
-gym = "0.17.2"
-tensorboard = "^2.8.0"
-tqdm = "^4.64.0"
-jupyter = "^1.0.0"
-matplotlib = "^3.5.1"
-pandas = "^1.4.2"
-pyglet = "1.5.0"
+python = ">=3.10,<4.0"
+numpy = "^2.1.2"
+torch = "^2.4.1"
+scipy = "^1.14.1"
+tensorboard = "^2.18.0"
+tqdm = "^4.66.5"
+jupyter = "^1.1.1"
+matplotlib = "^3.9.2"
+pandas = "^2.2.3"
+pyglet = "^2.0.18"
+gymnasium = {extras = ["box2d"], version = "^1.0.0"}
+pygame = "^2.6.1"
+swig = "^4.2.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^8.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

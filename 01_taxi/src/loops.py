@@ -24,7 +24,7 @@ def train(
 
     for i in tqdm(range(0, n_episodes)):
 
-        state = env.reset()
+        state, _ = env.reset()
 
         epochs, penalties, reward, = 0, 0, 0
         done = False
@@ -38,7 +38,8 @@ def train(
                 # Exploit learned values
                 action = agent.get_action(state)
 
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
 
             agent.update_parameters(state, action, reward, next_state)
 
@@ -75,13 +76,12 @@ def evaluate(
 
     for i in tqdm(range(0, n_episodes)):
 
-        if initial_state:
+        if initial_state is not None:
             # init the environment at 'initial_state'
-            state = initial_state
-            env.s = initial_state
+            state, _ = env.reset(seed=initial_state)
         else:
             # random starting state
-            state = env.reset()
+            state, _ = env.reset()
 
         epochs, penalties, reward, = 0, 0, 0
         frames = []
@@ -96,7 +96,8 @@ def evaluate(
                 # Exploit learned values
                 action = agent.get_action(state)
 
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
 
             frames.append({
                 'frame': env.render(mode='ansi'),
@@ -145,10 +146,10 @@ def train_many_runs(
 
 if __name__ == '__main__':
 
-    import gym
+    import gymnasium as gym
     from src.q_agent import QAgent
 
-    env = gym.make("Taxi-v3").env
+    env = gym.make("Taxi-v3")
     alpha = 0.1
     gamma = 0.6
     agent = QAgent(env, alpha, gamma)

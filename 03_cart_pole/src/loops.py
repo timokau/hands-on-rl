@@ -33,21 +33,21 @@ def train(
 
     for i in tqdm(range(0, n_episodes)):
 
-        state = env.reset()
+        state, _ = env.reset()
 
         rewards = 0
         steps = 0
-        done = False
-        while not done:
+        terminated = truncated = False
+        while not (terminated or truncated):
 
             action = agent.act(state)
 
             # agents takes a step and the environment throws out a new state and
             # a reward
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
 
             # agent observes transition and stores it for later use
-            agent.observe(state, action, reward, next_state, done)
+            agent.observe(state, action, reward, next_state, terminated, truncated)
 
             # learning happens here, through experience replay
             agent.replay()
@@ -105,14 +105,14 @@ def evaluate(
 
     for i in tqdm(range(0, n_episodes)):
 
-        state = env.reset()
+        state, _ = env.reset()
         rewards = 0
         steps = 0
-        done = False
-        while not done:
+        terminated = truncated = False
+        while not (terminated or truncated):
 
             action = agent.act(state, epsilon=epsilon)
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
 
             rewards += reward
             steps += 1

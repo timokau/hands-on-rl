@@ -1,17 +1,16 @@
+import gymnasium as gym
 from src.base_agent import BaseAgent
 
 class MomentumAgent(BaseAgent):
 
-    def __init__(self, env):
+    def __init__(self, env: gym.Env):
         self.env = env
 
         self.valley_position = -0.5
 
     def get_action(self, state, epsilon=None) -> int:
         """
-        No input arguments to this function.
-        The agent does not consider the state of the environment when deciding
-        what to do next.
+        The agent considers the velocity of the car to decide the action.
         """
         velocity = state[1]
 
@@ -24,6 +23,6 @@ class MomentumAgent(BaseAgent):
 
         return action
 
-    def update_parameters(self, state, action, reward, next_state, epsilon):
+    def update_parameters(self, state, action, reward, next_state, terminated, truncated, epsilon):
         pass
 

@@ -16,7 +16,7 @@ from argparse import ArgumentParser
 import json
 from pdb import set_trace as stop
 
-import gym
+import gymnasium as gym
 import numpy as np
 import torch
 import torch.nn as nn
@@ -242,14 +242,14 @@ class QAgent:
 
         return action
 
-    def observe(self, state, action, reward, next_state, done) -> None:
+    def observe(self, state, action, reward, next_state, terminated, truncated) -> None:
 
         # preprocess state
         s = self._preprocess_state(state)
         ns = self._preprocess_state(next_state)
 
         # store new experience in the agent's memory.
-        self.memory.push(s, action, reward, ns, done)
+        self.memory.push(s, action, reward, ns, terminated, truncated)
 
         self._step_counter += 1
 
@@ -280,7 +280,12 @@ class QAgent:
             action_batch = torch.cat([torch.tensor([[a]]).long().view(1, -1) for a in batch.action]).to(self.device)
             reward_batch = torch.cat([torch.tensor([r]).float() for r in batch.reward]).to(self.device)
             next_state_batch = torch.cat([torch.from_numpy(s).float().view(1, -1) for s in batch.next_state]).to(self.device)
-            done_batch = torch.tensor(batch.done).float().to(self.device)
+            terminated_batch = torch.tensor(
+                batch.terminated).bool().to(self.device)
+            truncated_batch = torch.tensor(
+                batch.truncated).bool().to(self.device)
+            term_or_trunc_float_batch = (
+                terminated_batch | truncated_batch).float()
 
             # q_values for all 3 actions
             q_values = self.q_net(state_batch)
@@ -296,7 +301,8 @@ class QAgent:
                 next_q_values, _ = next_q_values.max(dim=1)
 
                 # TD target
-                target_q_values = (1 - done_batch) * next_q_values * self.discount_factor + reward_batch
+                target_q_values = (1 - term_or_trunc_float_batch) * \
+                    next_q_values * self.discount_factor + reward_batch
 
             # compute loss
             loss = F.mse_loss(q_values.squeeze(1), target_q_values)

@@ -4,7 +4,7 @@ from pdb import set_trace as stop
 from typing import Optional
 
 import pandas as pd
-import gym
+import gymnasium as gym
 
 from src.config import SAVED_AGENTS_DIR
 
@@ -12,18 +12,19 @@ import numpy as np
 
 def make_video(agent):
 
-    import gym
-    from gym.wrappers import Monitor
-    env = Monitor(gym.make('CartPole-v0'), './video', force=True)
+    import gymnasium as gym
+    from gymnasium.wrappers import Monitor
+    env = Monitor(gym.make('CartPole-v1'), './video', force=True)
 
-    state = env.reset()
+    state, _ = env.reset()
     done = False
 
     while not done:
         # action = env.action_space.sample()
         import torch
         action = agent.act(torch.as_tensor(state, dtype=torch.float32))
-        state_next, reward, done, info = env.step(action)
+        state_next, reward, terminated, truncated, info = env.step(action)
+        done = terminated or truncated
     env.close()
 
 
@@ -32,11 +33,14 @@ def show_video(
     env,
     sleep_sec: float = 0.1,
     seed: Optional[int] = 0,
-    mode: str = "rgb_array"
+    mode="rgb_array",
 ):
 
-    env.seed(seed)
-    state = env.reset()
+    try:
+        state, _ = env.reset(seed)
+    except TypeError:
+        print("Warning: Seed not supported by environment")
+        state, _ = env.reset()
 
     # LAPADULA
     if mode == "rgb_array":
@@ -45,18 +49,19 @@ def show_video(
         steps = 0
         fig, ax = plt.subplots(figsize=(8, 6))
 
-    done = False
-    while not done:
+    terminated = False
+    truncated = False
+    while not (terminated or truncated):
 
         import torch
         action = agent.act(torch.as_tensor(state, dtype=torch.float32))
 
-        state, reward, done, info = env.step(action)
+        state, reward, terminated, truncated, info = env.step(action)
 
         # LAPADULA
         if mode == "rgb_array":
             steps += 1
-            frame = env.render(mode=mode)
+            frame = env.render()
             ax.cla()
             ax.axes.yaxis.set_visible(False)
             ax.imshow(frame)
@@ -82,8 +87,7 @@ if __name__ == '__main__':
 
     from src.q_agent import QAgent
 
-
-    env = gym.make('CartPole-v1')
+    env = gym.make('CartPole-v1', render_mode="rgb_array")
     # env._max_episode_steps = 1000
 
     show_video(agent, env, sleep_sec=args.sleep_sec)

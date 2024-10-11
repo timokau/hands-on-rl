@@ -1,21 +1,20 @@
+import gymnasium as gym
 from src.base_agent import BaseAgent
 
 class RandomAgent(BaseAgent):
     """
-    This taxi driver selects actions randomly.
-    You better not get into this taxi!
+    This agent selects actions randomly.
     """
-    def __init__(self, env):
+    def __init__(self, env: gym.Env):
         self.env = env
 
-    def get_action(self, state, epsilon) -> int:
+    def get_action(self, state, epsilon=None) -> int:
         """
-        No input arguments to this function.
         The agent does not consider the state of the environment when deciding
         what to do next.
         """
         return self.env.action_space.sample()
 
-    def update_parameters(self, state, action, reward, next_state, epsilon):
+    def update_parameters(self, state, action, reward, next_state, terminated, truncated, epsilon):
         pass
 

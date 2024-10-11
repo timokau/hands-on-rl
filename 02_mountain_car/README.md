@@ -13,12 +13,12 @@ In this part we use SARSA to help a poor car win the battle against gravity!
 
 ### Quick setup
 
-The easiest way to get the code working in your machine is by using [Poetry](https://python-poetry.org/docs/#installation).
+For this exercise, let's try the [Poetry](https://python-poetry.org/docs/#installation) dependency management system.
 
 
 1. You can install Poetry with this one-liner:
     ```bash
-    $ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    $ curl -sSL https://install.python-poetry.org | python3 -
     ```
 
 2. Git clone the code
@@ -40,6 +40,7 @@ The easiest way to get the code working in your machine is by using [Poetry](htt
     ```bash
     $ poetry shell
     ```
+   If you are using vscode, restart vscode instead (not `poetry shell` necessary). The poetry environment will then be available when choosing a kernel for the Jupyter notebook.
 
 6. Set PYTHONPATH and launch jupyter (jupyter-lab param may fix launch problems on some systems)
     ```bash

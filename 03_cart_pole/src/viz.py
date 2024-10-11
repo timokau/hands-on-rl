@@ -4,7 +4,7 @@ from pdb import set_trace as stop
 from typing import Optional
 
 import pandas as pd
-import gym
+import gymnasium as gym
 
 from src.config import SAVED_AGENTS_DIR
 
@@ -13,8 +13,7 @@ import numpy as np
 
 def show_video(agent, env, sleep_sec: float = 0.1, seed: Optional[int] = 0, mode: str = "rgb_array"):
 
-    env.seed(seed)
-    state = env.reset()
+    state, _ = env.reset(seed=seed)
 
     # LAPADULA
     if mode == "rgb_array":
@@ -23,16 +22,16 @@ def show_video(agent, env, sleep_sec: float = 0.1, seed: Optional[int] = 0, mode
         steps = 0
         fig, ax = plt.subplots(figsize=(8, 6))
 
-    done = False
-    while not done:
+    terminated = truncated = False
+    while not (terminated or truncated):
 
         action = agent.act(state, epsilon=0.001)
-        state, reward, done, info = env.step(action)
+        state, reward, terminated, truncated, info = env.step(action)
 
         # LAPADULA
         if mode == "rgb_array":
             steps += 1
-            frame = env.render(mode=mode)
+            frame = env.render()
             ax.cla()
             ax.axes.yaxis.set_visible(False)
             ax.imshow(frame)
@@ -59,8 +58,8 @@ if __name__ == '__main__':
     from src.q_agent import QAgent
 
 
-    env = gym.make('CartPole-v1')
-    # env._max_episode_steps = 1000
+    env = gym.make('CartPole-v1', render_mode="rgb_array")
+    # env.spec.max_episode_steps = 1000
 
     show_video(agent, env, sleep_sec=args.sleep_sec)
 

@@ -1,17 +1,16 @@
 import numpy as np
+import gymnasium as gym
 
 
 class RandomAgent:
     """
-    This taxi driver selects actions randomly.
-    You better not get into this taxi!
+    This agent selects actions randomly.
     """
-    def __init__(self, env):
+    def __init__(self, env: gym.Env):
         self.env = env
 
     def act(self, state: np.array, epsilon: float = None) -> int:
         """
-        No input arguments to this function.
         The agent does not consider the state of the environment when deciding
         what to do next.
         """

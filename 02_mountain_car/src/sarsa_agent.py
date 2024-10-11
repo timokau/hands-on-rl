@@ -1,11 +1,12 @@
 import numpy as np
 import random
+import gymnasium as gym
 
 from src.base_agent import BaseAgent
 
 class SarsaAgent(BaseAgent):
 
-    def __init__(self, env, alpha, gamma):
+    def __init__(self, env: gym.Env, alpha: float, gamma: float):
 
         self.env = env
         self.q_table = self._init_q_table()
@@ -46,7 +47,7 @@ class SarsaAgent(BaseAgent):
         
         return action
 
-    def update_parameters(self, state, action, reward, next_state, epsilon):
+    def update_parameters(self, state, action, reward, next_state, terminated, truncated, epsilon):
         """"""
         s = self._discretize_state(state)
         ns = self._discretize_state(next_state)
@@ -54,7 +55,7 @@ class SarsaAgent(BaseAgent):
 
         delta = self.alpha * (
                 reward
-                + self.gamma * self.q_table[ns[0], ns[1], na]
+                + (1 - terminated) * self.gamma * self.q_table[ns[0], ns[1], na]
                 - self.q_table[s[0], s[1], action]
         )
         self.q_table[s[0], s[1], action] += delta

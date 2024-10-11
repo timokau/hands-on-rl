@@ -1,7 +1,7 @@
 from collections import namedtuple, deque
 import random
 
-Transition = namedtuple('Transition', ('state', 'action', 'reward', 'next_state', 'done'))
+Transition = namedtuple('Transition', ('state', 'action', 'reward', 'next_state', 'terminated', 'truncated'))
 
 
 class AgentMemory:

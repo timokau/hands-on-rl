@@ -7,7 +7,7 @@ import zipfile
 import gdown
 from tqdm import tqdm
 import pandas as pd
-import gym
+import gymnasium as gym
 from torch.utils.data import Dataset, DataLoader
 
 import numpy as np
@@ -51,10 +51,10 @@ def simulate_episode(env, agent) -> List[Dict]:
     We let the agent interact with the environment and return a list of collected
     states and actions
     """
-    done = False
-    state = env.reset()
+    terminated = truncated = False
+    state, _ = env.reset()
     samples = []
-    while not done:
+    while not (terminated or truncated):
 
         action = agent.act(state, epsilon=0.0)
         samples.append({
@@ -64,7 +64,7 @@ def simulate_episode(env, agent) -> List[Dict]:
             's3': state[3],
             'action': action
         })
-        state, reward, done, info = env.step(action)
+        state, reward, terminated, truncated, info = env.step(action)
 
     return samples
 
@@ -190,7 +190,7 @@ def run(
     hidden_layers: Union[Tuple[int], None],
     n_epochs: int,
 ):
-    env = gym.make('CartPole-v1')
+    env = gym.make('CartPole-v1', render_mode=None)
 
     print('Downloading agent data from GDrive...')
     path_to_agent_data = download_agent_parameters()

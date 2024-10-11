@@ -10,7 +10,7 @@ class BaseAgent(ABC):
         pass
 
     @abstractmethod
-    def update_parameters(self, state, action, reward, next_state):
+    def update_parameters(self, state, action, reward, next_state, terminated, truncated):
         pass
 
     def save_to_disk(self, path: Path):

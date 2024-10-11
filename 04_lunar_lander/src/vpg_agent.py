@@ -10,7 +10,7 @@ import torch
 from torch.optim import Adam
 from torch.utils.tensorboard import SummaryWriter
 from torch.distributions.categorical import Categorical
-import gym
+import gymnasium as gym
 
 from src.model_factory import get_model
 from src.utils import (
@@ -129,20 +129,26 @@ class VPGAgent:
         success_per_episode = []
 
         # fix seed
-        self.env.seed(seed)
+        try:
+            self.env.reset(seed)
+        except TypeError:
+            print("Warning: Seed not supported by environment")
+            self.env.reset()
+
         self.env.action_space.seed(seed)
 
         for i in tqdm(range(0, n_episodes)):
 
-            state = self.env.reset()
+            state, _ = self.env.reset()
             rewards = 0
-            done = False
+            terminated = False
+            truncated = False
             reward = None
-            while not done:
+            while not (terminated or truncated):
 
                 action = self.act(torch.as_tensor(state, dtype=torch.float32))
 
-                next_state, reward, done, info = self.env.step(action)
+                next_state, reward, terminated, truncated, info = self.env.step(action)
                 rewards += reward
 
                 state = next_state
@@ -162,8 +168,9 @@ class VPGAgent:
         batch_lens = []         # for measuring episode lengths
 
         # reset episode-specific variables
-        obs = self.env.reset()       # first obs comes from starting distribution
-        done = False            # signal from environment that episode is over
+        obs, _ = self.env.reset()       # first obs comes from starting distribution
+        terminated = False      # signal from environment that episode is over
+        truncated = False       # signal from environment that episode is truncated
         ep_rews = []            # list for rewards accrued throughout ep
 
         # collect experience by acting in the environment with current policy
@@ -175,13 +182,13 @@ class VPGAgent:
             # act in the environment
             # act = get_action(torch.as_tensor(obs, dtype=torch.float32))
             action = self.act(torch.as_tensor(obs, dtype=torch.float32))
-            obs, rew, done, _ = self.env.step(action)
+            obs, rew, terminated, truncated, _ = self.env.step(action)
 
             # save action, reward
             batch_acts.append(action)
             ep_rews.append(rew)
 
-            if done:
+            if terminated or truncated:
                 # if episode is over, record info about episode
                 ep_ret, ep_len = sum(ep_rews), len(ep_rews)
                 batch_rets.append(ep_ret)
@@ -198,7 +205,8 @@ class VPGAgent:
                     raise NotImplemented
 
                 # reset episode-specific variables
-                obs, done, ep_rews = self.env.reset(), False, []
+                obs, _ = self.env.reset()
+                terminated, truncated, ep_rews = False, False, []
 
                 # end experience loop if we have enough of it
                 if len(batch_obs) > n_samples:

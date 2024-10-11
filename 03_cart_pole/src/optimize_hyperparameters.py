@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from pdb import set_trace as stop
 
 import optuna
-import gym
+import gymnasium as gym
 import numpy as np
 import mlflow
 
@@ -91,7 +91,7 @@ def objective(
     n_episodes_to_train: int = 200,
 ):
     env_name = 'CartPole-v1'
-    env = gym.make('CartPole-v1')
+    env = gym.make('CartPole-v1', render_mode=None)
 
     with mlflow.start_run():
 
