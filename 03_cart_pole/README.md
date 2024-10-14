@@ -4,8 +4,6 @@
 <h4>-- Dmitri Mendeleev</h4>
 </div>
 
-![](http://datamachines.xyz/wp-content/uploads/2022/01/pexels-yogendra-singh-1701202.jpg)
-
 ## Table of Contents
 * [Welcome 🤗](#welcome-)
 * [Lecture transcripts](#lecture-transcripts)

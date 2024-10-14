@@ -4,8 +4,6 @@
 <h4>-- Pau quoting Neil Armstrong</h4>
 </div>
 
-![](http://datamachines.xyz/wp-content/uploads/2022/05/jagoda_and_kai-2048x1536.jpg)
-
 ## Table of Contents
 * [Welcome 🤗](#welcome-)
 * [Lecture transcripts](#lecture-transcripts)
