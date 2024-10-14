@@ -3,9 +3,9 @@
 <h2>From zero to HERO 🦸🏻‍🦸🏽</h2>
 </div>
 
-This tutorial is adapted from the repo of [Pau Labarta Bajo] (https://github.com/Paulescu/hands-on-rl). Have a look into his greate blog posts.
+This tutorial is adapted from the repo of [Pau Labarta Bajo](https://datamachines.xyz/the-hands-on-reinforcement-learning-course-page/). Have a look into his great blog posts.
 
-## Welcome to the course 🤗❤️
+## Welcome to the course
 
 Welcome to my step by step hands-on-course that will take you from basic reinforcement learning to cutting-edge deep RL.
 
