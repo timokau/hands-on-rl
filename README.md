@@ -3,12 +3,7 @@
 <h2>From zero to HERO 🦸🏻‍🦸🏽</h2>
 </div>
 
-## Contents
-
-* [Welcome to the course](#welcome-to-the-course-)
-* [Lectures](#lectures)
-* [Wanna contribute?](#wanna-contribute)
-* [Let's connect!](#lets-connect)
+This tutorial is adapted from the repo of [Pau Labarta Bajo] (https://github.com/Paulescu/hands-on-rl). Have a look into his greate blog posts.
 
 ## Welcome to the course 🤗❤️
 
@@ -31,6 +26,8 @@ I will give you enough context to get you familiar with DL philosophy and unders
 
 0. [Introduction to Reinforcement Learning](https://datamachines.xyz/2021/11/17/hands-on-reinforcement-learning-course-part-1/)
 1. [Q-learning to drive a taxi 🏆](01_taxi/README.md)
+
+Go deeper:
 2. [SARSA to beat gravity 🏆](02_mountain_car/README.md)
 3. [Parametric Q learning to keep the balance 💃 🏆](03_cart_pole/README.md)
 4. [Policy gradients to land on the Moon 🏆](04_lunar_lander/README.md)
